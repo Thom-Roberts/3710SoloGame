@@ -4934,7 +4934,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3f49ec35326f1e046baf62e1dc5d291d, type: 2}
+  - {fileID: 0}
   - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -5249,6 +5249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speedMultiplier: 20
   health: 100
+  hpText: {fileID: 0}
   ResetEvent:
     m_PersistentCalls:
       m_Calls:
