@@ -9,8 +9,12 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
     private Vector3 initialPosition;
+    private Vector3 targetPosition;
     public float speedMultiplier = 10f;
     public int health = 100;
+    
+    [Range(0, 1)]
+    public float speed = 0.9f;
 
     public GameObject hpText;
 
@@ -22,31 +26,46 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         initialPosition = transform.position;
+        targetPosition = new Vector3(0, 2, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(health <= 0) {
-            resetPlayer();
-        }
-        else {
-            Vector3 newMovementVector = Vector3.zero;
-            newMovementVector.z = Input.GetAxis("Vertical");
-            newMovementVector.x = Input.GetAxis("Horizontal");
+        // If we're done moving
+        if(targetPosition == transform.position) {
+            Vector3 newPosition = Vector3.zero;
+            bool newPositionChosen = false;
+            if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                newPosition = transform.position + (Vector3.right * 2);
+                newPositionChosen = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                newPosition = transform.position + (Vector3.left * 2);
+                newPositionChosen = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                newPosition = transform.position + (Vector3.forward * 2);
+                newPositionChosen = true;
+            } 
+            else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                newPosition = transform.position + (Vector3.back * 2);
+                newPositionChosen = true;
+            }
 
-            rb.AddForce(newMovementVector * speedMultiplier);
+            if(newPositionChosen && canMove(newPosition)) {
+                targetPosition = newPosition;
+            }
         }
+        //Vector3 newMovementVector = Vector3.zero;
+        //newMovementVector.z = Input.GetAxis("Vertical");
+        //newMovementVector.x = Input.GetAxis("Horizontal");
+
+        //rb.AddForce(newMovementVector * speedMultiplier);
     }
 
-    private void OnTriggerStay(Collider other) {
-        if (other.CompareTag("Enemy")) {
-            Debug.Log(health);
-            health -= 2;
-            hpText.GetComponent<Text>().text = $"Health {health.ToString()}";
-
-            DamageEvent?.Invoke();
-        }
+    private void FixedUpdate() {
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speedMultiplier * Time.deltaTime);
     }
 
     private void resetPlayer() {
@@ -56,5 +75,14 @@ public class PlayerController : MonoBehaviour
         transform.position = initialPosition;
         health = 100;
         hpText.GetComponent<Text>().text = $"Health {health.ToString()}";
+    }
+
+    // Determines if the player can move in the direction they want
+    private bool canMove(Vector3 newPosition) {
+        if(newPosition.z > 12 || newPosition.z < 0 || newPosition.x > 12 || newPosition.x < 0) {
+            return false;
+        }
+
+        return true;
     }
 }
