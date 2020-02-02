@@ -22,11 +22,11 @@ public class ColorChange : MonoBehaviour
         Debug.Log("Collision entered: " + collision);
         if(tag == "Player") {
             matReference.color = playerTint;
-            gameState.UpdateState(new Tuple<int, int, string>(xPosition, zPosition, "player"));
+            gameState.UpdateState(new Tuple<int, int, string>(zPosition, xPosition, "player"));
         }
         else if(tag == "Enemy") {
             matReference.color = enemyTint;
-            gameState.UpdateState(new Tuple<int, int, string>(xPosition, zPosition, "enemy"));
+            gameState.UpdateState(new Tuple<int, int, string>(zPosition, xPosition, "enemy"));
         }
     }
 }
