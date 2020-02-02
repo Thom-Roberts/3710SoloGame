@@ -22,6 +22,7 @@ public class CameraController : MonoBehaviour
     }
 
     private void LateUpdate() {
-        transform.position = Vector3.Lerp(transform.position, playerTransform.position + offset, cameraDampenSpeed);
+        // NOTE: Remove this line most likely
+       // transform.position = Vector3.Lerp(transform.position, playerTransform.position + offset, cameraDampenSpeed);
     }
 }

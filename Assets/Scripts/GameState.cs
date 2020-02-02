@@ -1,32 +1,35 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameState : MonoBehaviour
 {
     public int maxGameBoardSize = 7;
     private string[,] gameState;
 
+    public GameObject playerScoreText;
+    public GameObject enemyScoreText;
+    public GameObject victoryText;
+    public GameObject countText;
+
     // Start is called before the first frame update
     void Start()
     {
         gameState = new string[maxGameBoardSize, maxGameBoardSize];
-        for(var i = 0; i < 7; ++i) {
-            for(var j = 0; j < 7; ++j) {
+        for (var i = 0; i < 7; ++i) {
+            for (var j = 0; j < 7; ++j) {
                 gameState[i, j] = "none";
             }
         }
-    }
 
-    // Update is called once per frame
-    void Update() {
-        CheckForWin();
+        // I want to calculate the winning num at runtime, so set the text after that is done
+        countText.GetComponent<TextMeshProUGUI>().text = $"To win: {(int)Math.Ceiling((double)maxGameBoardSize * maxGameBoardSize / 2)}";
+        countText.SetActive(true);
     }
 
     void CheckForWin() {
         int playerCount = 0;
-        int opponentCount = 0;
+        int enemyCount = 0;
 
         for(var i = 0; i < maxGameBoardSize; ++i) {
             for(var j = 0; j < maxGameBoardSize; ++j) {
@@ -34,19 +37,25 @@ public class GameState : MonoBehaviour
                     playerCount++;
                 }
                 else if(gameState[i, j] == "enemy") {
-                    opponentCount++;
+                    enemyCount++;
                 }
             }
         }
 
+        UpdateUI(playerCount, enemyCount); //
+
         // Must be more than half of the squares. Doing this casts to make sure I round up
         // See here: https://code-examples.net/en/q/e0e5c
         int winSqaureNumber = (int)Math.Ceiling((double)maxGameBoardSize * maxGameBoardSize / 2);
-        if(playerCount > winSqaureNumber) {
+        if(playerCount >= winSqaureNumber) {
             // Player wins!
+            victoryText.GetComponent<TextMeshProUGUI>().text = "You Win!";
+            victoryText.SetActive(true);
         }
-        else if(opponentCount > winSqaureNumber) {
+        else if(enemyCount >= winSqaureNumber) {
             // Enemy wins!
+            victoryText.GetComponent<TextMeshProUGUI>().text = "You lose...";
+            victoryText.SetActive(true);
         }
     }
 
@@ -55,5 +64,12 @@ public class GameState : MonoBehaviour
     public void UpdateState(Tuple<int, int, string> change) {
         // For now these divisions are hard set because the elements are scaled by 2 in the x & z directions
         gameState[change.Item1 / 2, change.Item2 / 2] = change.Item3;
+        
+        CheckForWin();
+    }
+
+    private void UpdateUI(int playerCount, int enemyCount) {
+        playerScoreText.GetComponent<TextMeshProUGUI>().text = $"You: {playerCount}";
+        enemyScoreText.GetComponent<TextMeshProUGUI>().text = $"Enemy: {enemyCount}";
     }
 }

@@ -19,7 +19,7 @@ public class ColorChange : MonoBehaviour
         var tag = collision.gameObject.tag;
         int xPosition = (int)transform.position.x;
         int zPosition = (int)transform.position.z;
-        Debug.Log("Collision entered: " + collision);
+        
         if(tag == "Player") {
             matReference.color = playerTint;
             gameState.UpdateState(new Tuple<int, int, string>(zPosition, xPosition, "player"));
