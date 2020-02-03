@@ -21,6 +21,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {   
         ableToMove = false;
+        gameActive = true;
         targetPosition = new Vector3(12, 1.5f, 12);
 
         InvokeRepeating("Move", 1.5f, timeBetweenMoves);
@@ -31,7 +32,7 @@ public class EnemyController : MonoBehaviour
     }
 
     private void Move() {
-        if(transform.position == targetPosition) {
+        if(gameActive && transform.position == targetPosition) {
             targetPosition = FindValidPosition();
             Debug.Log(targetPosition);
         }
