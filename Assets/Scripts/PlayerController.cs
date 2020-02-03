@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 targetPosition;
     public float speedMultiplier = 10f;
     public int health = 100;
-    
+    public Transform enemyTransform;
+
     [Range(0, 1)]
     public float speed = 0.9f;
 
@@ -80,6 +81,9 @@ public class PlayerController : MonoBehaviour
     // Determines if the player can move in the direction they want
     private bool canMove(Vector3 newPosition) {
         if(newPosition.z > 12 || newPosition.z < 0 || newPosition.x > 12 || newPosition.x < 0) {
+            return false;
+        }
+        if(newPosition.x == enemyTransform.position.x && newPosition.z == enemyTransform.position.z) {
             return false;
         }
 

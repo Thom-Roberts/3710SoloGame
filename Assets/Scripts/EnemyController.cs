@@ -11,7 +11,7 @@ public class EnemyController : MonoBehaviour
     [Range(1, 5)]
     public float timeBetweenMoves = 2.5f;
     public float speedMultiplier = 10f;
-
+    public Transform playerTransform;
     private Vector3 targetPosition;
     private Vector3 previousPosition; // Used for preventing movement to same previous square
     
@@ -74,7 +74,8 @@ public class EnemyController : MonoBehaviour
             int numToConsider = Random.Range(0, positionsToConsider.Count);
             Vector3 nextPosition = new Vector3(positionsToConsider[numToConsider].Item2, transform.position.y, positionsToConsider[numToConsider].Item1);
             // Run checks if a valid position
-            if(nextPosition == previousPosition) { // Don't want the same position twice in a row
+            bool willCollideWithPlayer = (nextPosition.x == playerTransform.position.x) && (nextPosition.z == playerTransform.position.z);
+            if(nextPosition == previousPosition || willCollideWithPlayer) { // Don't want the same position twice in a row
                 positionsToConsider.RemoveAt(numToConsider);
             }
             else {
