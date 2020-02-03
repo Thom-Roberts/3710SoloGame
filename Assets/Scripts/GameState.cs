@@ -5,7 +5,7 @@ using TMPro;
 public class GameState : MonoBehaviour
 {
     public int maxGameBoardSize = 7;
-    private string[,] gameState;
+    public string[,] gameState;
 
     public GameObject playerScoreText;
     public GameObject enemyScoreText;
