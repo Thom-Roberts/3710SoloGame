@@ -13,17 +13,16 @@ public class EnemyController : MonoBehaviour
     public float speedMultiplier = 10f;
 
     private Vector3 targetPosition;
-    // First update should set this to true, after it falls into position
-    private bool ableToMove;
+    private Vector3 previousPosition; // Used for preventing movement to same previous square
+    
     private bool gameActive;
 
     // Start is called before the first frame update
     void Start()
     {   
-        ableToMove = false;
         gameActive = true;
         targetPosition = new Vector3(12, 1.5f, 12);
-
+        previousPosition = transform.position;
         InvokeRepeating("Move", 1.5f, timeBetweenMoves);
     }
 
@@ -33,8 +32,10 @@ public class EnemyController : MonoBehaviour
 
     private void Move() {
         if(gameActive && transform.position == targetPosition) {
-            targetPosition = FindValidPosition();
-            Debug.Log(targetPosition);
+            Vector3 potentialPosition = FindValidPosition();
+            if(potentialPosition != Vector3.zero) {
+                targetPosition = potentialPosition;
+            }
         }
     }
 
@@ -64,9 +65,22 @@ public class EnemyController : MonoBehaviour
             positionsToConsider.Add(new Tuple<int, int>(zCoordinate + 2, xCoordinate));
         }
 
-        int numToConsider = Random.Range(0, positionsToConsider.Count);
-        // Check to see if a valid choice?
+        while(true) {
+            // No valid positions found
+            if(positionsToConsider.Count == 0) {
+                return Vector3.zero;
+            }
 
-        return new Vector3(positionsToConsider[numToConsider].Item2, transform.position.y, positionsToConsider[numToConsider].Item1);
+            int numToConsider = Random.Range(0, positionsToConsider.Count);
+            Vector3 nextPosition = new Vector3(positionsToConsider[numToConsider].Item2, transform.position.y, positionsToConsider[numToConsider].Item1);
+            // Run checks if a valid position
+            if(nextPosition == previousPosition) { // Don't want the same position twice in a row
+                positionsToConsider.RemoveAt(numToConsider);
+            }
+            else {
+                previousPosition = transform.position;
+                return nextPosition;
+            }
+        }
     }
 }
