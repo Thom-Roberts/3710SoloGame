@@ -53,6 +53,7 @@ public class GameState : MonoBehaviour
             var childTransforms = rowInScene.GetComponentsInChildren<Transform>();
 
             foreach (var childTransform in childTransforms) {
+                // Get components in children also gets the parent component, so we need to ignore that
                 if(childTransform.name.StartsWith("Row")) {
                     continue;
                 }
