@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
     }
 
     void FixedUpdate() {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speedMultiplier * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speedMultiplier * Time.fixedDeltaTime);
     }
 
     private void Move() {

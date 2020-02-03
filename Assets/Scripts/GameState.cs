@@ -1,30 +1,80 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+
+using Random = UnityEngine.Random;
 
 public class GameState : MonoBehaviour
 {
     public int maxGameBoardSize = 7;
     public string[,] gameState;
+    public string[,] blocksLifted;
+    [Range(0, 10)]
+    public int numBlocksToShift = 5;
 
     public GameObject playerScoreText;
     public GameObject enemyScoreText;
     public GameObject victoryText;
     public GameObject countText;
+    public GameObject whiteBox;
 
     // Start is called before the first frame update
     void Start()
     {
         gameState = new string[maxGameBoardSize, maxGameBoardSize];
-        for (var i = 0; i < 7; ++i) {
-            for (var j = 0; j < 7; ++j) {
+        blocksLifted = new string[maxGameBoardSize, maxGameBoardSize];
+
+        for (var i = 0; i < maxGameBoardSize; ++i) {
+            for (var j = 0; j < maxGameBoardSize; ++j) {
                 gameState[i, j] = "none";
+                blocksLifted[i, j] = "down";
             }
         }
 
         // I want to calculate the winning num at runtime, so set the text after that is done
         countText.GetComponent<TextMeshProUGUI>().text = $"To win: {(int)Math.Ceiling((double)maxGameBoardSize * maxGameBoardSize / 2)}";
         countText.SetActive(true);
+
+        InvokeRepeating("MoveBlocks", 1.5f, 1.5f);
+    }
+
+    void MoveBlocks() {
+        HashSet<Tuple<int, int>> blocksToMove = new HashSet<Tuple<int, int>>();
+        
+        for(var i = 0; i < numBlocksToShift; ++i) {
+            var row = Random.Range(0, maxGameBoardSize - 1);
+            var column = Random.Range(0, maxGameBoardSize - 1);
+            blocksToMove.Add(new Tuple<int, int>(row, column));
+        }
+
+        foreach(Tuple<int,int> block in blocksToMove) {
+            Transform rowInScene = whiteBox.transform.Find($"Row {block.Item1}");
+            var childTransforms = rowInScene.GetComponentsInChildren<Transform>();
+
+            foreach (var childTransform in childTransforms) {
+                if(childTransform.name.StartsWith("Row")) {
+                    continue;
+                }
+                if (childTransform.position.x == block.Item2 * 2) {
+                    // Move up or down?
+                    if (blocksLifted[block.Item1, block.Item2] == "up") {
+                        blocksLifted[block.Item1, block.Item2] = "down";
+                        var controller = childTransform.GetComponent<SquareController>();
+                        controller.destinationPosition = 
+                            new Vector3(childTransform.position.x, childTransform.position.y - 1, childTransform.position.z);
+                    } else {
+                        blocksLifted[block.Item1, block.Item2] = "up";
+                        var controller = childTransform.GetComponent<SquareController>();
+                        
+                        controller.destinationPosition = 
+                            new Vector3(childTransform.position.x, childTransform.position.y + 1, childTransform.position.z);
+                    }
+
+                    break;
+                }
+            }
+        }
     }
 
     void CheckForWin() {
