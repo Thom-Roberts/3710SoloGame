@@ -67,7 +67,13 @@ public class EnemyController : MonoBehaviour
 
         while(true) {
             // No valid positions found
-            if(positionsToConsider.Count == 0) {
+            if(positionsToConsider.Count == 0 && canMove(previousPosition)) {
+                if(canMove(previousPosition)) { // If trapped in a corner, will go back a space
+                    var tempPosition = previousPosition;
+                    previousPosition = transform.position;
+                    return tempPosition;
+                }
+
                 return Vector3.zero;
             }
 
@@ -78,10 +84,24 @@ public class EnemyController : MonoBehaviour
             if(nextPosition == previousPosition || willCollideWithPlayer) { // Don't want the same position twice in a row
                 positionsToConsider.RemoveAt(numToConsider);
             }
+            else if(!canMove(nextPosition)) { // Can't go up a level
+                positionsToConsider.RemoveAt(numToConsider);
+            }
             else {
                 previousPosition = transform.position;
                 return nextPosition;
             }
         }
+    }
+
+    bool canMove(Vector3 potentialMove) {
+        var thisRaised = gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2];
+        var destinationRaised = gameState.blocksLifted[(int)potentialMove.z / 2, (int)potentialMove.x / 2];
+
+        if (destinationRaised == "up" && thisRaised == "down") {
+            return false;
+        }
+
+        return true;
     }
 }
