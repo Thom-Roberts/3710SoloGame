@@ -5515,21 +5515,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7367995308020472321, guid: 08a15e5474d407441a5b95912e243cdf,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7367995308020472324, guid: 08a15e5474d407441a5b95912e243cdf,
-        type: 3}
-      propertyPath: m_Drag
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7367995308020472324, guid: 08a15e5474d407441a5b95912e243cdf,
-        type: 3}
-      propertyPath: m_AngularDrag
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7367995308020472325, guid: 08a15e5474d407441a5b95912e243cdf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5538,7 +5523,7 @@ PrefabInstance:
     - target: {fileID: 7367995308020472325, guid: 08a15e5474d407441a5b95912e243cdf,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.75
+      value: 1.55
       objectReference: {fileID: 0}
     - target: {fileID: 7367995308020472325, guid: 08a15e5474d407441a5b95912e243cdf,
         type: 3}
@@ -5587,11 +5572,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7367995308020472327, guid: 08a15e5474d407441a5b95912e243cdf,
         type: 3}
-      propertyPath: hpText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7367995308020472327, guid: 08a15e5474d407441a5b95912e243cdf,
-        type: 3}
       propertyPath: enemyTransform
       value: 
       objectReference: {fileID: 354536354}
@@ -5600,10 +5580,5 @@ PrefabInstance:
       propertyPath: gameState
       value: 
       objectReference: {fileID: 2083159978}
-    - target: {fileID: 7367995309969264549, guid: 08a15e5474d407441a5b95912e243cdf,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08a15e5474d407441a5b95912e243cdf, type: 3}

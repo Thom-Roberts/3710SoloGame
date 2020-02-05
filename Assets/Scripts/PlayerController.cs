@@ -27,16 +27,16 @@ public class PlayerController : MonoBehaviour
     void Start() {
         rb = GetComponent<Rigidbody>();
         initialPosition = transform.position;
-        targetPosition = new Vector3(0, 2, 0);
+        targetPosition = new Vector3(0, 1.55f, 0);
     }
 
     // Update is called once per frame
     void Update() {
         if(gameState.gameRunning) {
             if (gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2] == "up") {
-                targetPosition.y = 3;
+                targetPosition.y = 2.55f;
             } else {
-                targetPosition.y = 2;
+                targetPosition.y = 1.55f;
             }
             // If we're done moving
             if (targetPosition == transform.position) {
@@ -64,13 +64,13 @@ public class PlayerController : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speedMultiplier * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speedMultiplier * Time.fixedDeltaTime);
     }
 
     public void resetPlayer() {
         rb.velocity = Vector3.zero;
         transform.position = initialPosition;
-        targetPosition = new Vector3(0, 2, 0);
+        targetPosition = new Vector3(0, 1.55f, 0);
     }
 
     // Determines if the player can move in the direction they want
