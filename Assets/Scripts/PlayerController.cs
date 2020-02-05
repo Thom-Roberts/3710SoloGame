@@ -24,16 +24,14 @@ public class PlayerController : MonoBehaviour
     public UnityEvent DamageEvent;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         rb = GetComponent<Rigidbody>();
         initialPosition = transform.position;
         targetPosition = new Vector3(0, 2, 0);
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         if(gameState.gameRunning) {
             if (gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2] == "up") {
                 targetPosition.y = 3;
@@ -69,13 +67,10 @@ public class PlayerController : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, speedMultiplier * Time.deltaTime);
     }
 
-    private void resetPlayer() {
-        ResetEvent?.Invoke();
-
+    public void resetPlayer() {
         rb.velocity = Vector3.zero;
         transform.position = initialPosition;
-        health = 100;
-        hpText.GetComponent<Text>().text = $"Health {health.ToString()}";
+        targetPosition = new Vector3(0, 2, 0);
     }
 
     // Determines if the player can move in the direction they want

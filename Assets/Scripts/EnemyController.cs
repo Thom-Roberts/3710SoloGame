@@ -18,10 +18,8 @@ public class EnemyController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
-        targetPosition = new Vector3(12, 1.5f, 12);
-        previousPosition = transform.position;
-        InvokeRepeating("Move", 1.5f, timeBetweenMoves);
+    {
+        InitializeEnemy();
     }
 
     void Update() {
@@ -113,5 +111,16 @@ public class EnemyController : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void ResetEnemy() {
+        InitializeEnemy();
+    }
+
+    private void InitializeEnemy() {
+        transform.position = new Vector3(12, 1.5f, 12);
+        targetPosition = new Vector3(12, 1.5f, 12);
+        previousPosition = new Vector3(12, 1.5f, 12);
+        InvokeRepeating("Move", 1.5f, timeBetweenMoves);
     }
 }

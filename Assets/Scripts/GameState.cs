@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using TMPro;
 
 using Random = UnityEngine.Random;
@@ -14,30 +15,19 @@ public class GameState : MonoBehaviour
     public int numBlocksToShift = 5;
     public bool gameRunning = true;
 
-
     public GameObject playerScoreText;
     public GameObject enemyScoreText;
     public GameObject victoryText;
     public GameObject countText;
     public GameObject whiteBox;
+    public GameObject resetButton;
+
+    public UnityEvent ResetEvent;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameState = new string[maxGameBoardSize, maxGameBoardSize];
-        blocksLifted = new string[maxGameBoardSize, maxGameBoardSize];
-
-        for (var i = 0; i < maxGameBoardSize; ++i) {
-            for (var j = 0; j < maxGameBoardSize; ++j) {
-                gameState[i, j] = "none";
-                blocksLifted[i, j] = "down";
-            }
-        }
-
-        // I want to calculate the winning num at runtime, so set the text after that is done
-        countText.GetComponent<TextMeshProUGUI>().text = $"To win: {(int)Math.Ceiling((double)maxGameBoardSize * maxGameBoardSize / 2)}";
-        countText.SetActive(true);
-
+        InitializeState();
         InvokeRepeating("MoveBlocks", 1.5f, 1.5f);
     }
 
@@ -72,7 +62,8 @@ public class GameState : MonoBehaviour
                         var controller = childTransform.GetComponent<SquareController>();
                         controller.destinationPosition = 
                             new Vector3(childTransform.position.x, childTransform.position.y - 1, childTransform.position.z);
-                    } else {
+                    } 
+                    else {
                         blocksLifted[block.Item1, block.Item2] = "up";
                         var controller = childTransform.GetComponent<SquareController>();
                         
@@ -111,12 +102,15 @@ public class GameState : MonoBehaviour
             victoryText.GetComponent<TextMeshProUGUI>().text = "You Win!";
             victoryText.SetActive(true);
             gameRunning = false;
+            resetButton.SetActive(true);
+
         }
         else if(enemyCount >= winSqaureNumber) {
             // Enemy wins!
             victoryText.GetComponent<TextMeshProUGUI>().text = "You lose...";
             victoryText.SetActive(true);
             gameRunning = false;
+            resetButton.SetActive(true);
         }
     }
 
@@ -132,5 +126,41 @@ public class GameState : MonoBehaviour
     private void UpdateUI(int playerCount, int enemyCount) {
         playerScoreText.GetComponent<TextMeshProUGUI>().text = $"You: {playerCount}";
         enemyScoreText.GetComponent<TextMeshProUGUI>().text = $"Enemy: {enemyCount}";
+    }
+
+    public void Reset() {
+        InitializeState();
+
+        ResetEvent?.Invoke();
+        InvokeRepeating("MoveBlocks", 1.5f, 1.5f);
+    }
+
+    private void InitializeState() {
+        gameState = new string[maxGameBoardSize, maxGameBoardSize];
+        blocksLifted = new string[maxGameBoardSize, maxGameBoardSize];
+
+        for (var i = 0; i < maxGameBoardSize; ++i) {
+            for (var j = 0; j < maxGameBoardSize; ++j) {
+                gameState[i, j] = "none";
+                blocksLifted[i, j] = "down";
+            }
+        }
+
+        // Reset block height as well
+        var transforms = whiteBox.GetComponentsInChildren<Transform>();
+        foreach(Transform transform in transforms) {
+            if(transform.name.StartsWith("Square")) {
+                transform.GetComponent<SquareController>().ResetPosition();
+                transform.GetComponent<ColorChange>().ResetColor();
+            }
+        }
+
+        // I want to calculate the winning num at runtime, so set the text after that is done
+        countText.GetComponent<TextMeshProUGUI>().text = $"To win: {(int)Math.Ceiling((double)maxGameBoardSize * maxGameBoardSize / 2)}";
+        countText.SetActive(true);
+        victoryText.SetActive(false);
+        resetButton.SetActive(false);
+        gameRunning = true;
+        
     }
 }

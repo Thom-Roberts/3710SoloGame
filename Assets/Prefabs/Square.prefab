@@ -95,6 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTint: {r: 0.26352793, g: 0.71534914, b: 0.8867924, a: 0}
   enemyTint: {r: 0.7830189, g: 0.46168566, b: 0.46168566, a: 0}
+  defaultTint: {fileID: 2100000, guid: 454e64e0aecffd74f892102d03b9df49, type: 2}
 --- !u!65 &7374200259922179251
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -120,5 +121,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9151400070d812447af14cd44b8c7802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destinationPosition: {x: 0, y: 0, z: 0}
+  destinationPosition: {x: 0, y: 0.5, z: 0}
   speedMultiplier: 10
