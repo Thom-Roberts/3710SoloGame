@@ -27,7 +27,13 @@ public class EnemyController : MonoBehaviour
     void Update() {
         if(!gameState.gameRunning) {
             CancelInvoke("Move");
-        }    
+        }
+        if (gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2] == "up") {
+            targetPosition.y = 2.5f;
+        } else {
+            targetPosition.y = 1.5f;
+        }
+
     }
 
     void FixedUpdate() {
