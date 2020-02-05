@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public float speedMultiplier = 10f;
     public int health = 100;
     public Transform enemyTransform;
+    public GameState gameState;
 
     [Range(0, 1)]
     public float speed = 0.9f;
@@ -33,6 +34,12 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2] == "up") {
+            targetPosition.y = 3;
+        }
+        else {
+            targetPosition.y = 2;
+        }
         // If we're done moving
         if(targetPosition == transform.position) {
             Vector3 newPosition = Vector3.zero;
@@ -84,6 +91,13 @@ public class PlayerController : MonoBehaviour
             return false;
         }
         if(newPosition.x == enemyTransform.position.x && newPosition.z == enemyTransform.position.z) {
+            return false;
+        }
+
+        var thisRaised = gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2];
+        var destinationRaised = gameState.blocksLifted[(int)newPosition.z / 2, (int)newPosition.x / 2];
+
+        if(destinationRaised == "up" && thisRaised == "down") {
             return false;
         }
 
