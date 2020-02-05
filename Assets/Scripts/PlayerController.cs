@@ -34,42 +34,35 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2] == "up") {
-            targetPosition.y = 3;
-        }
-        else {
-            targetPosition.y = 2;
-        }
-        // If we're done moving
-        if(targetPosition == transform.position) {
-            Vector3 newPosition = Vector3.zero;
-            bool newPositionChosen = false;
-            if (Input.GetKeyDown(KeyCode.RightArrow)) {
-                newPosition = transform.position + (Vector3.right * 2);
-                newPositionChosen = true;
+        if(gameState.gameRunning) {
+            if (gameState.blocksLifted[(int)transform.position.z / 2, (int)transform.position.x / 2] == "up") {
+                targetPosition.y = 3;
+            } else {
+                targetPosition.y = 2;
             }
-            else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-                newPosition = transform.position + (Vector3.left * 2);
-                newPositionChosen = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.UpArrow)) {
-                newPosition = transform.position + (Vector3.forward * 2);
-                newPositionChosen = true;
-            } 
-            else if (Input.GetKeyDown(KeyCode.DownArrow)) {
-                newPosition = transform.position + (Vector3.back * 2);
-                newPositionChosen = true;
-            }
+            // If we're done moving
+            if (targetPosition == transform.position) {
+                Vector3 newPosition = Vector3.zero;
+                bool newPositionChosen = false;
+                if (Input.GetKeyDown(KeyCode.RightArrow)) {
+                    newPosition = transform.position + (Vector3.right * 2);
+                    newPositionChosen = true;
+                } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+                    newPosition = transform.position + (Vector3.left * 2);
+                    newPositionChosen = true;
+                } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
+                    newPosition = transform.position + (Vector3.forward * 2);
+                    newPositionChosen = true;
+                } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
+                    newPosition = transform.position + (Vector3.back * 2);
+                    newPositionChosen = true;
+                }
 
-            if(newPositionChosen && canMove(newPosition)) {
-                targetPosition = newPosition;
+                if (newPositionChosen && canMove(newPosition)) {
+                    targetPosition = newPosition;
+                }
             }
         }
-        //Vector3 newMovementVector = Vector3.zero;
-        //newMovementVector.z = Input.GetAxis("Vertical");
-        //newMovementVector.x = Input.GetAxis("Horizontal");
-
-        //rb.AddForce(newMovementVector * speedMultiplier);
     }
 
     private void FixedUpdate() {

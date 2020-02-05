@@ -14,16 +14,20 @@ public class EnemyController : MonoBehaviour
     public Transform playerTransform;
     private Vector3 targetPosition;
     private Vector3 previousPosition; // Used for preventing movement to same previous square
-    
-    private bool gameActive;
+ 
 
     // Start is called before the first frame update
     void Start()
     {   
-        gameActive = true;
         targetPosition = new Vector3(12, 1.5f, 12);
         previousPosition = transform.position;
         InvokeRepeating("Move", 1.5f, timeBetweenMoves);
+    }
+
+    void Update() {
+        if(!gameState.gameRunning) {
+            CancelInvoke("Move");
+        }    
     }
 
     void FixedUpdate() {
@@ -31,7 +35,7 @@ public class EnemyController : MonoBehaviour
     }
 
     private void Move() {
-        if(gameActive && transform.position == targetPosition) {
+        if(transform.position == targetPosition) {
             Vector3 potentialPosition = FindValidPosition();
             if(potentialPosition != Vector3.zero) {
                 targetPosition = potentialPosition;

@@ -12,6 +12,8 @@ public class GameState : MonoBehaviour
     public string[,] blocksLifted;
     [Range(0, 10)]
     public int numBlocksToShift = 5;
+    public bool gameRunning = true;
+
 
     public GameObject playerScoreText;
     public GameObject enemyScoreText;
@@ -37,6 +39,12 @@ public class GameState : MonoBehaviour
         countText.SetActive(true);
 
         InvokeRepeating("MoveBlocks", 1.5f, 1.5f);
+    }
+
+    void Update() {
+        if(!gameRunning) {
+            CancelInvoke("MoveBlocks");
+        }    
     }
 
     void MoveBlocks() {
@@ -93,7 +101,7 @@ public class GameState : MonoBehaviour
             }
         }
 
-        UpdateUI(playerCount, enemyCount); //
+        UpdateUI(playerCount, enemyCount);
 
         // Must be more than half of the squares. Doing this casts to make sure I round up
         // See here: https://code-examples.net/en/q/e0e5c
@@ -102,11 +110,13 @@ public class GameState : MonoBehaviour
             // Player wins!
             victoryText.GetComponent<TextMeshProUGUI>().text = "You Win!";
             victoryText.SetActive(true);
+            gameRunning = false;
         }
         else if(enemyCount >= winSqaureNumber) {
             // Enemy wins!
             victoryText.GetComponent<TextMeshProUGUI>().text = "You lose...";
             victoryText.SetActive(true);
+            gameRunning = false;
         }
     }
 
