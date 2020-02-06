@@ -32,6 +32,6 @@ public class ColorChange : MonoBehaviour
     }
 
     public void ResetColor() {
-        matReference.color = new Color(1f,1f,1f);
+        GetComponent<Renderer>().material.color = new Color(1f,1f,1f);
     }
 }

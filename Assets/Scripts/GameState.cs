@@ -23,6 +23,9 @@ public class GameState : MonoBehaviour
     public GameObject resetButton;
 
     public UnityEvent ResetEvent;
+    public UnityEvent VictoryEvent;
+    public UnityEvent DefeatEvent;
+
 
     // Start is called before the first frame update
     void Start()
@@ -101,6 +104,7 @@ public class GameState : MonoBehaviour
             // Player wins!
             victoryText.GetComponent<TextMeshProUGUI>().text = "You Win!";
             victoryText.SetActive(true);
+            VictoryEvent?.Invoke();
             gameRunning = false;
             resetButton.SetActive(true);
 
@@ -109,6 +113,7 @@ public class GameState : MonoBehaviour
             // Enemy wins!
             victoryText.GetComponent<TextMeshProUGUI>().text = "You lose...";
             victoryText.SetActive(true);
+            DefeatEvent?.Invoke();
             gameRunning = false;
             resetButton.SetActive(true);
         }
@@ -124,8 +129,8 @@ public class GameState : MonoBehaviour
     }
 
     private void UpdateUI(int playerCount, int enemyCount) {
-        playerScoreText.GetComponent<TextMeshProUGUI>().text = $"You: {playerCount}";
-        enemyScoreText.GetComponent<TextMeshProUGUI>().text = $"Enemy: {enemyCount}";
+        playerScoreText.GetComponent<TextMeshProUGUI>().text = $"{playerCount}";
+        enemyScoreText.GetComponent<TextMeshProUGUI>().text = $"{enemyCount}";
     }
 
     public void Reset() {
