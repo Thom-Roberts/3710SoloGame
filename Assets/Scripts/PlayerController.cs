@@ -39,25 +39,35 @@ public class PlayerController : MonoBehaviour
                 targetPosition.y = 1.55f;
             }
             // If we're done moving
-            if (targetPosition == transform.position) {
+            if (Vector3.Distance(transform.position, targetPosition) < 0.005f) {
                 Vector3 newPosition = Vector3.zero;
+                Vector3 newRotation = new Vector3();
                 bool newPositionChosen = false;
                 if (Input.GetKeyDown(KeyCode.RightArrow)) {
                     newPosition = transform.position + (Vector3.right * 2);
+                    newPosition.x = Mathf.Round(newPosition.x);
+                    newRotation.y = 90f;
                     newPositionChosen = true;
                 } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
                     newPosition = transform.position + (Vector3.left * 2);
+                    newPosition.x = Mathf.Round(newPosition.x);
+                    newRotation.y = 270f;
                     newPositionChosen = true;
                 } else if (Input.GetKeyDown(KeyCode.UpArrow)) {
                     newPosition = transform.position + (Vector3.forward * 2);
+                    newPosition.z = Mathf.Round(newPosition.z);
+                    newRotation.y = 0f;
                     newPositionChosen = true;
                 } else if (Input.GetKeyDown(KeyCode.DownArrow)) {
                     newPosition = transform.position + (Vector3.back * 2);
+                    newPosition.z = Mathf.Round(newPosition.z);
+                    newRotation.y = 180f;
                     newPositionChosen = true;
                 }
 
                 if (newPositionChosen && canMove(newPosition)) {
                     targetPosition = newPosition;
+                    transform.localEulerAngles = newRotation;
                 }
             }
         }
@@ -75,10 +85,10 @@ public class PlayerController : MonoBehaviour
 
     // Determines if the player can move in the direction they want
     private bool canMove(Vector3 newPosition) {
-        if(newPosition.z > 12 || newPosition.z < 0 || newPosition.x > 12 || newPosition.x < 0) {
+        if(newPosition.z > 12.5 || newPosition.z < -0.5 || newPosition.x > 12.5 || newPosition.x < -0.5) {
             return false;
         }
-        if(newPosition.x == enemyTransform.position.x && newPosition.z == enemyTransform.position.z) {
+        if(Mathf.Abs(newPosition.x - enemyTransform.position.x) < 0.005f && Mathf.Abs(newPosition.z - enemyTransform.position.z) < 0.005f) {
             return false;
         }
 
