@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector3.zero;
         transform.position = initialPosition;
         targetPosition = new Vector3(0, 1.55f, 0);
+        transform.localEulerAngles = Vector3.zero;
         ResetEvent?.Invoke(); // Plays the partical system effects
     }
 

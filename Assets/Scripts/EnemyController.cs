@@ -128,6 +128,7 @@ public class EnemyController : MonoBehaviour
 
     private void InitializeEnemy() {
         transform.position = new Vector3(12, 1.5f, 12);
+        transform.localEulerAngles = Vector3.zero;
         targetPosition = new Vector3(12, 1.5f, 12);
         previousPosition = new Vector3(12, 1.5f, 12);
         InvokeRepeating("Move", 1.5f, timeBetweenMoves);
