@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
     }
 
     private void Move() {
-        if(transform.position == targetPosition) {
+        if(Vector3.Distance(transform.position, targetPosition) < 0.005f) {
             Vector3 potentialPosition = FindValidPosition();
             if(potentialPosition != Vector3.zero) {
                 targetPosition = potentialPosition;
@@ -88,7 +88,7 @@ public class EnemyController : MonoBehaviour
             int numToConsider = Random.Range(0, positionsToConsider.Count);
             Vector3 nextPosition = new Vector3(positionsToConsider[numToConsider].Item2, transform.position.y, positionsToConsider[numToConsider].Item1);
             // Run checks if a valid position
-            bool willCollideWithPlayer = (nextPosition.x == playerTransform.position.x) && (nextPosition.z == playerTransform.position.z);
+            bool willCollideWithPlayer = (Mathf.Abs(nextPosition.x - playerTransform.position.x) < 0.005f) && (Mathf.Abs(nextPosition.z - playerTransform.position.z) < 0.005f);
             if(nextPosition == previousPosition || willCollideWithPlayer) { // Don't want the same position twice in a row
                 positionsToConsider.RemoveAt(numToConsider);
             }
