@@ -42,6 +42,18 @@ public class EnemyController : MonoBehaviour
         if(Vector3.Distance(transform.position, targetPosition) < 0.005f) {
             Vector3 potentialPosition = FindValidPosition();
             if(potentialPosition != Vector3.zero) {
+                if(potentialPosition.x < transform.position.x) {
+                    transform.localEulerAngles = new Vector3(0, 90, 0);
+                }
+                else if(potentialPosition.x > transform.position.x) {
+                    transform.localEulerAngles = new Vector3(0, 270, 0);
+                }
+                else if(potentialPosition.z < transform.position.z) {
+                    transform.localEulerAngles = Vector3.zero;
+                }
+                else if(potentialPosition.z > transform.position.z) {
+                    transform.localEulerAngles = new Vector3(0, 180, 0);   
+                }
                 targetPosition = potentialPosition;
             }
         }
@@ -50,10 +62,7 @@ public class EnemyController : MonoBehaviour
 
 
     Vector3 FindValidPosition() {
-        // NOTE: Add some check to make sure I don't go back to a position I visited the previous round
-
         // x is columns, z is rows
-        string[,] state = gameState.gameState;
 
         int xCoordinate = (int)transform.position.x;
         int zCoordinate = (int)transform.position.z;
