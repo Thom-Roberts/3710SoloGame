@@ -37,7 +37,10 @@ public class GameState : MonoBehaviour
     void Update() {
         if(!gameRunning) {
             CancelInvoke("MoveBlocks");
-        }    
+        }
+        if(Input.GetKey(KeyCode.Escape)) {
+            Application.Quit();
+        }
     }
 
     void MoveBlocks() {
